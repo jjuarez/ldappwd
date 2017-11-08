@@ -9,8 +9,7 @@ module Ldappwd
 
    DEFAULT_SALT = 'I@mth3M@st3r0fth3P1@n'
 
-   def self.generate_password(secret, salt=DEFAULT_SALT, options={ })
-    options.merge!(salt: DEFAULT_SALT)
+   def self.generate_password(secret, salt=DEFAULT_SALT)
     "{SSHA}#{Base64.encode64(Digest::SHA1.digest("#{secret}#{salt}")+salt).chomp}"
    end
 
