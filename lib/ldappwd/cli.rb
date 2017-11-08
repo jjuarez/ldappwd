@@ -10,8 +10,6 @@ module Ldappwd
 
    def self.run(arguments)
      parameters = Optionparser.parse(arguments, { salt: Generators::DEFAULT_SALT })
-
-     $stderr.puts parameters.inspect
      puts Generators.ssha(parameters[:secret], parameters[:salt])
    end
   end
