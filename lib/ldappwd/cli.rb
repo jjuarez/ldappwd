@@ -3,20 +3,16 @@
 require 'digest'
 require 'base64'
 require 'ldappwd/option_parser'
+require 'ldappwd/generators'
 
 module Ldappwd
   class CLI
 
-   DEFAULT_SALT = 'I@mth3M@st3r0fth3P1@n'
-
-   def self.generate_password(secret, salt=DEFAULT_SALT)
-    "{SSHA}#{Base64.encode64(Digest::SHA1.digest("#{secret}#{salt}")+salt).chomp}"
-   end
-
    def self.run(arguments)
-     parameters = Ldappwd::Optionparser.parse(arguments)
+     parameters = Optionparser.parse(arguments, { salt: Generators::DEFAULT_SALT })
+
      $stderr.puts parameters.inspect
-     CLI.generate_password(parameters[:secret])
+     puts Generators.ssha(parameters[:secret], parameters[:salt])
    end
   end
 end
