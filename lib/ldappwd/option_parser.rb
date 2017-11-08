@@ -8,24 +8,28 @@ module Ldappwd
 
     def self.parse(arguments, defaults = { })
       options = defaults
-
-      OptionParser.new do |opts|
+      parser  = OptionParser.new do |opts|
         opts.banner = "Usage: ldappwd"
 
-        opts.on("-S", "--secret PLAINTEXT", "The secret to convert into a LDAP password") do |secret|
-          options[:secret] = secret
+        opts.on("-S", "--secret PLAINTEXT", String, "The secret to convert into a LDAP password") do |s|
+          options[:secret] = s
         end
 
-        opts.on("-s", "--salt [SALT]", "The salt of your passwords") do |salt|
-          options[:salt] = salt
+        opts.on("-s", "--salt [SALT]", String, "The salt of your passwords") do |s|
+          options[:salt] = s
+        end
+
+        opts.on("-f", "--format PLAIN|LDIFF|JSON|YAML", String, [:plain, :ldiff, :json, :yaml], "The output format of the command") do |f|
+          options[:format] = f
         end
 
         opts.on_tail("-h", "--help", "Show this message") do
           puts opts
           exit
         end
-      end.parse!(arguments)
+      end
 
+      parser.parse!
       raise ::OptionParser::MissingArgument.new('The secret argument is mandatory') if options[:secret].nil?
 
       options
