@@ -13,7 +13,13 @@ module Ldappwd
     end
 
     def ldiff(secret, options={ password_attribute: 'userPassword' })
-      "#{options[:password_attribute]}: #{secret}"
+<<-LDIFF
+dn: $DN
+changetype: modify
+replace: #{options[:password_attribute]}
+#{options[:password_attribute]}: #{secret}
+
+LDIFF
     end
 
     def yaml(secret, options= { password_attribute: 'user_password' })
